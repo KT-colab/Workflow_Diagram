@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>2030 Census LUCA Decision Guide</title>
+
+  <style>
+    :root {
+      --navy: #17365d;
+      --blue: #0071bc;
+      --blue-dark: #005ea8;
+      --blue-light: #e8f4fb;
+
+      --green: #168a45;
+      --green-light: #e9f7ef;
+
+      --red: #c93434;
+      --red-light: #fff0f0;
+
+      --gold: #fdb81e;
+      --gold-light: #fff8df;
+
+      --gray-900: #1f2933;
+      --gray-700: #4b5563;
+      --gray-500: #6b7280;
+      --gray-300: #d1d5db;
+      --gray-200: #e5e7eb;
+      --gray-100: #f3f4f6;
+      --white: #ffffff;
+
+      --shadow: 0 10px 30px rgba(23, 54, 93, 0.12);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+      color: var(--gray-900);
+
+      background:
+        linear-gradient(
+          180deg,
+          #f5f9fc 0%,
+          #ffffff 40%,
+          #f5f9fc 100%
+        );
+
+      min-height: 100vh;
+    }
+
+    /* ==========================================
+       HEADER
+    ========================================== */
+
+    header {
+      background: var(--navy);
+      color: white;
+      border-bottom: 5px solid var(--gold);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 24px 20px;
+    }
+
+    .agency-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+
+      opacity: 0.95;
+      margin-bottom: 8px;
+    }
+
+    .agency-seal {
+      width: 34px;
+      height: 34px;
+
+      border: 2px solid white;
+      border-radius: 50%;
+
+      display: grid;
+      place-items: center;
+
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    header h1 {
+      margin: 0;
+
+      font-size: clamp(25px, 4vw, 38px);
+      line-height: 1.15;
+    }
+
+    header p {
+      margin: 10px 0 0;
+
+      max-width: 720px;
+
+      color: #dce9f5;
+
+      line-height: 1.5;
+    }
+
+    /* ==========================================
+       MAIN
+    ========================================== */
+
+    main {
+      width: min(900px, calc(100% - 32px));
+
+      margin: 0 auto;
+
+      padding: 30px 0 60px;
+    }
+
+    /* ==========================================
+       PROGRESS
+    ========================================== */
+
+    .progress-area {
+      margin-bottom: 24px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      margin-bottom: 8px;
+
+      color: var(--gray-700);
+
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+
+      background: var(--gray-200);
+
+      border-radius: 999px;
+
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 10%;
+
+      background: var(--blue);
+
+      border-radius: inherit;
+
+      transition: width 0.35s ease;
+    }
+
+    /* ==========================================
+       BREADCRUMB
+    ========================================== */
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+
+      gap: 7px;
+
+      margin-bottom: 18px;
+
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+
+    .breadcrumb span:last-child {
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    /* ==========================================
+       DECISION CARD
+    ========================================== */
+
+    .decision-card {
+      background: var(--white);
+
+      border: 1px solid var(--gray-200);
+
+      border-radius: var(--radius);
+
+      box-shadow: var(--shadow);
+
+      overflow: hidden;
+
+      animation: cardIn 0.35s ease;
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ==========================================
+       CARD HEADER
+    ========================================== */
+
+    .card-header {
+      padding: 26px 30px 22px;
+
+      background: #f8fbfd;
+
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .step-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+
+      background: var(--blue-light);
+      color: var(--blue-dark);
+
+      padding: 7px 11px;
+
+      border-radius: 999px;
+
+      font-size: 12px;
+      font-weight: 800;
+
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+
+      margin-bottom: 14px;
+    }
+
+    .card-header h2 {
+      margin: 0;
+
+      color: var(--navy);
+
+      font-size: clamp(22px, 4vw, 30px);
+
+      line-height: 1.25;
+    }
+
+    .card-header p {
+      color: var(--gray-700);
+
+      line-height: 1.6;
+
+      margin: 12px 0 0;
+
+      max-width: 720px;
+    }
+
+    /* ==========================================
+       CARD BODY
+    ========================================== */
+
+    .card-body {
+      padding: 28px 30px 30px;
+    }
+
+    /* ==========================================
+       INFORMATION BOX
+    ========================================== */
+
+    .info-box {
+      display: flex;
+      gap: 13px;
+
+      background: var(--gray-100);
+
+      border-left: 4px solid var(--blue);
+
+      padding: 15px 16px;
+
+      margin-bottom: 25px;
+
+      border-radius: 6px;
+    }
+
+    .info-icon {
+      flex: 0 0 auto;
+
+      width: 26px;
+      height: 26px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      background: var(--blue);
+
+      color: white;
+
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .info-box p {
+      margin: 0;
+
+      font-size: 14px;
+
+      color: var(--gray-700);
+
+      line-height: 1.55;
+    }
+
+    /* ==========================================
+       ACTION BOX
+    ========================================== */
+
+    .action-box {
+      border: 1px solid var(--gray-200);
+
+      border-radius: 10px;
+
+      padding: 20px;
+
+      margin-bottom: 25px;
+
+      background: white;
+    }
+
+    .action-box h3 {
+      margin: 0 0 7px;
+
+      color: var(--navy);
+
+      font-size: 18px;
+    }
+
+    .action-box p {
+      margin: 0;
+
+      color: var(--gray-700);
+
+      line-height: 1.55;
+    }
+
+    /* ==========================================
+       ANSWER BUTTONS
+    ========================================== */
+
+    .answer-grid {
+      display: grid;
+
+      grid-template-columns: repeat(2, 1fr);
+
+      gap: 14px;
+    }
+
+    .answer-btn {
+      border: 2px solid var(--gray-300);
+
+      background: white;
+
+      color: var(--gray-900);
+
+      border-radius: 10px;
+
+      padding: 17px 18px;
+
+      cursor: pointer;
+
+      text-align: left;
+
+      transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .answer-btn:hover {
+      border-color: var(--blue);
+
+      background: var(--blue-light);
+
+      transform: translateY(-1px);
+
+      box-shadow:
+        0 5px 15px rgba(0, 113, 188, 0.12);
+    }
+
+    .answer-btn:focus-visible {
+      outline: 4px solid rgba(0, 113, 188, 0.2);
+
+      outline-offset: 2px;
+    }
+
+    .answer-btn .answer-title {
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+
+      font-weight: 800;
+
+      font-size: 17px;
+    }
+
+    .answer-btn .answer-description {
+      display: block;
+
+      margin: 7px 0 0 34px;
+
+      color: var(--gray-500);
+
+      font-size: 13px;
+
+      line-height: 1.4;
+    }
+
+    .answer-icon {
+      width: 25px;
+      height: 25px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      color: white;
+
+      font-size: 14px;
+
+      font-weight: 900;
+    }
+
+    .yes-icon {
+      background: var(--green);
+    }
+
+    .no-icon {
+      background: var(--red);
+    }
+
+    /* ==========================================
+       BUTTON CONTROLS
+    ========================================== */
+
+    .controls {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 15px;
+
+      margin-top: 22px;
+    }
+
+    .secondary-btn {
+      border: 1px solid var(--gray-300);
+
+      background: white;
+
+      color: var(--gray-700);
+
+      padding: 10px 15px;
+
+      border-radius: 7px;
+
+      cursor: pointer;
+
+      font-weight: 700;
+
+      transition: 0.2s ease;
+    }
+
+    .secondary-btn:hover {
+      background: var(--gray-100);
+
+      color: var(--navy);
+    }
+
+    .secondary-btn:disabled {
+      opacity: 0.45;
+
+      cursor: not-allowed;
+    }
+
+    .restart-btn {
+      color: var(--blue);
+
+      border-color: transparent;
+
+      background: transparent;
+    }
+
+    .restart-btn:hover {
+      background: var(--blue-light);
+    }
+
+    /* ==========================================
+       OUTCOME
+    ========================================== */
+
+    .outcome {
+      padding: 34px 30px;
+
+      text-align: center;
+    }
+
+    .outcome-icon {
+      width: 70px;
+      height: 70px;
+
+      margin: 0 auto 18px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      font-size: 32px;
+
+      font-weight: 900;
+    }
+
+    .outcome.success .outcome-icon {
+      background: var(--green-light);
+
+      color: var(--green);
+    }
+
+    .outcome.warning .outcome-icon {
+      background: var(--gold-light);
+
+      color: #8a5a00;
+    }
+
+    .outcome.action .outcome-icon {
+      background: var(--blue-light);
+
+      color: var(--blue-dark);
+    }
+
+    .outcome h2 {
+      margin: 0;
+
+      color: var(--navy);
+
+      font-size: 28px;
+    }
+
+    .outcome > p {
+      max-width: 620px;
+
+      margin: 13px auto 0;
+
+      color: var(--gray-700);
+
+      line-height: 1.65;
+    }
+
+    .outcome-action {
+      margin: 25px auto 0;
+
+      max-width: 620px;
+
+      text-align: left;
+
+      background: var(--gray-100);
+
+      border-radius: 10px;
+
+      padding: 18px 20px;
+    }
+
+    .outcome-action strong {
+      color: var(--navy);
+    }
+
+    .outcome-action p {
+      margin: 7px 0 0;
+
+      font-size: 14px;
+    }
+
+    .start-again {
+      margin-top: 25px;
+
+      border: none;
+
+      background: var(--blue);
+
+      color: white;
+
+      padding: 13px 22px;
+
+      border-radius: 7px;
+
+      font-weight: 800;
+
+      cursor: pointer;
+    }
+
+    .start-again:hover {
+      background: var(--blue-dark);
+    }
+
+    /* ==========================================
+       HISTORY
+    ========================================== */
+
+    .history {
+      margin-top: 20px;
+
+      background: white;
+
+      border: 1px solid var(--gray-200);
+
+      border-radius: 10px;
+
+      padding: 17px 20px;
+    }
+
+    .history-title {
+      font-size: 13px;
+
+      font-weight: 800;
+
+      text-transform: uppercase;
+
+      color: var(--gray-500);
+
+      letter-spacing: 0.04em;
+
+      margin-bottom: 10px;
+    }
+
+    .history-list {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 7px;
+    }
+
+    .history-item {
+      background: var(--gray-100);
+
+      color: var(--gray-700);
+
+      border-radius: 5px;
+
+      padding: 6px 9px;
+
+      font-size: 12px;
+    }
+
+    /* ==========================================
+       DISCLAIMER
+    ========================================== */
+
+    .notice {
+      margin-top: 25px;
+
+      color: var(--gray-500);
+
+      font-size: 12px;
+
+      line-height: 1.55;
+
+      text-align: center;
+    }
+
+    /* ==========================================
+       RESPONSIVE
+    ========================================== */
+
+    @media (max-width: 650px) {
+
+      main {
+        width: min(100% - 20px, 900px);
+
+        padding-top: 20px;
+      }
+
+      .header-inner {
+        padding: 20px 16px;
+      }
+
+      .card-header,
+      .card-body {
+        padding: 22px 18px;
+      }
+
+      .answer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        align-items: stretch;
+      }
+
+      .controls .secondary-btn {
+        flex: 1;
+      }
+
+      .outcome {
+        padding: 28px 18px;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <!-- ==========================================
+       HEADER
+  ========================================== -->
+
+  <header>
+
+    <div class="header-inner">
+
+      <div class="agency-label">
+
+        <div class="agency-seal">
+          US
+        </div>
+
+        <span>
+          2030 Census • LUCA Decision Guide
+        </span>
+
+      </div>
+
+
+      <h1>
+        Local Update of Census Addresses
+      </h1>
+
+
+      <p>
+        Use this guided decision tool to determine
+        the appropriate next step based on your review
+        of Census address information.
+      </p>
+
+    </div>
+
+  </header>
+
+
+  <!-- ==========================================
+       MAIN APPLICATION
+  ========================================== -->
+
+  <main>
+
+    <!-- Progress -->
+
+    <div class="progress-area">
+
+      <div class="progress-top">
+
+        <span id="progressText">
+          Step 1 of 7
+        </span>
+
+        <span id="progressPercent">
+          14%
+        </span>
+
+      </div>
+
+
+      <div class="progress-track">
+
+        <div
+          class="progress-bar"
+          id="progressBar"
+        ></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Breadcrumb -->
+
+    <div
+      class="breadcrumb"
+      id="breadcrumb"
+    >
+
+      <span>
+        LUCA
+      </span>
+
+      <span>
+        ›
+      </span>
+
+      <span>
+        Getting Started
+      </span>
+
+    </div>
+
+
+    <!-- Decision Card -->
+
+    <section
+      class="decision-card"
+      id="decisionCard"
+      aria-live="polite"
+    >
+
+      <!-- JavaScript inserts content here -->
+
+    </section>
+
+
+    <!-- History -->
+
+    <div
+      class="history"
+      id="historyContainer"
+      style="display:none;"
+    >
+
+      <div class="history-title">
+        Your path
+      </div>
+
+
+      <div
+        class="history-list"
+        id="historyList"
+      ></div>
+
+    </div>
+
+
+    <!-- Notice -->
+
+    <div class="notice">
+
+      This interactive guide is based on the supplied
+      LUCA decision-tree workflow. It is intended as a
+      navigation aid and does not replace official
+      U.S. Census Bureau LUCA instructions, notices,
+      or program requirements.
+
+    </div>
+
+  </main>
+
+
+  <script>
+
+    /* ==========================================================
+       2030 LUCA DECISION TREE
+    ========================================================== */
+
+    const steps = {
+
+      /* ------------------------------------------
+         START
+      ------------------------------------------ */
+
+      start: {
+
+        type: "action",
+
+        step: 1,
+
+        title:
+          "Review Census Address Block Count Files",
+
+        description:
+          "Begin by reviewing the Census address block count files provided for your jurisdiction. Compare the address information with your local records and expectations.",
+
+        actionTitle:
+          "First step",
+
+        actionText:
+          "Review the Census address block count files and determine whether the counts meet your expectations.",
+
+        next:
+          "counts"
+
+      },
+
+
+      /* ------------------------------------------
+         QUESTION 1
+      ------------------------------------------ */
+
+      counts: {
+
+        type: "question",
+
+        step: 2,
+
+        title:
+          "Do the address block counts meet expectations?",
+
+        description:
+          "Based on your review of the Census address block count files, determine whether the reported counts are consistent with what your government expects.",
+
+        yes:
+          "concludeCounts",
+
+        no:
+          "addressListBenefit"
+
+      },
+
+
+      /* ------------------------------------------
+         OUTCOME
+      ------------------------------------------ */
+
+      concludeCounts: {
+
+        type: "outcome",
+
+        style: "success",
+
+        step: 7,
+
+        icon: "✓",
+
+        title:
+          "Conclude 2030 LUCA",
+
+        description:
+          "The address block counts meet your expectations. No additional review is indicated by this decision path.",
+
+        actionTitle:
+          "Next step",
+
+        actionText:
+          "Conclude your participation in the 2030 LUCA workflow."
+
+      },
+
+
+      /* ------------------------------------------
+         QUESTION 2
+      ------------------------------------------ */
+
+      addressListBenefit: {
+
+        type: "question",
+
+        step: 3,
+
+        title:
+          "Would reviewing the Census Address List be beneficial?",
+
+        description:
+          "If the address block counts do not meet expectations, determine whether a review of the Census Address List would help identify or resolve differences.",
+
+        yes:
+          "reviewAddressList",
+
+        no:
+          "concludeNoAddressList"
+
+      },
+
+
+      /* ------------------------------------------
+         OUTCOME
+      ------------------------------------------ */
+
+      concludeNoAddressList: {
+
+        type: "outcome",
+
+        style: "success",
+
+        step: 7,
+
+        icon: "✓",
+
+        title:
+          "Conclude 2030 LUCA",
+
+        description:
+          "A review of the Census Address List is not considered beneficial for your government at this point in the workflow.",
+
+        actionTitle:
+          "Next step",
+
+        actionText:
+          "Conclude your participation in the 2030 LUCA workflow."
+
+      },
+
+
+      /* ------------------------------------------
+         ACTION
+      ------------------------------------------ */
+
+      reviewAddressList: {
+
+        type: "action",
+
+        step: 4,
+
+        title:
+          "Review Census Address List",
+
+        description:
+          "Review the Census Address List for your jurisdiction. Compare the listed addresses with your local address information and identify any updates that may be needed.",
+
+        actionTitle:
+          "Review the list",
+
+        actionText:
+          "Examine the Census Address List and determine whether your government has updates to submit.",
+
+        next:
+          "updates"
+
+      },
+
+
+      /* ------------------------------------------
+         QUESTION 3
+      ------------------------------------------ */
+
+      updates: {
+
+        type: "question",
+
+        step: 5,
+
+        title:
+          "Did your government submit updates to the Census Address List?",
+
+        description:
+          "After reviewing the Census Address List, determine whether your government submitted updates through the LUCA process.",
+
+        yes:
+          "feedback",
+
+        no:
+          "closeoutNoUpdates"
+
+      },
+
+
+      /* ------------------------------------------
+         OUTCOME
+      ------------------------------------------ */
+
+      closeoutNoUpdates: {
+
+        type: "outcome",
+
+        style: "warning",
+
+        step: 7,
+
+        icon: "→",
+
+        title:
+          "Perform Closeout Tasks",
+
+        description:
+          "No updates were submitted to the Census Address List.",
+
+        actionTitle:
+          "Required next step",
+
+        actionText:
+          "Perform the applicable 2030 LUCA closeout tasks."
+
+      },
+
+
+      /* ------------------------------------------
+         ACTION
+      ------------------------------------------ */
+
+      feedback: {
+
+        type: "action",
+
+        step: 6,
+
+        title:
+          "Review LUCA Detailed Feedback Address List",
+
+        description:
+          "Review the detailed feedback provided through LUCA. Examine the feedback Address List and determine whether your government is satisfied with the results.",
+
+        actionTitle:
+          "Review your feedback",
+
+        actionText:
+          "Review the LUCA Detailed Feedback Address List before making your final determination.",
+
+        next:
+          "satisfied"
+
+      },
+
+
+      /* ------------------------------------------
+         QUESTION 4
+      ------------------------------------------ */
+
+      satisfied: {
+
+        type: "question",
+
+        step: 7,
+
+        title:
+          "Is your government satisfied with the feedback results?",
+
+        description:
+          "After reviewing the detailed LUCA feedback, determine whether the results are satisfactory for your government.",
+
+        yes:
+          "closeoutSatisfied",
+
+        no:
+          "appeal"
+
+      },
+
+
+      /* ------------------------------------------
+         OUTCOME
+      ------------------------------------------ */
+
+      closeoutSatisfied: {
+
+        type: "outcome",
+
+        style: "success",
+
+        step: 8,
+
+        icon: "✓",
+
+        title:
+          "Perform Closeout Tasks",
+
+        description:
+          "Your government is satisfied with the LUCA feedback results.",
+
+        actionTitle:
+          "Required next step",
+
+        actionText:
+          "Complete the applicable 2030 LUCA closeout tasks."
+
+      },
+
+
+      /* ------------------------------------------
+         OUTCOME
+      ------------------------------------------ */
+
+      appeal: {
+
+        type: "outcome",
+
+        style: "action",
+
+        step: 8,
+
+        icon: "!",
+
+        title:
+          "File an Appeal with OMB",
+
+        description:
+          "Your government is not satisfied with the LUCA feedback results.",
+
+        actionTitle:
+          "Next step",
+
+        actionText:
+          "File an appeal with the Office of Management and Budget (OMB) within 45 days, following the applicable LUCA appeal procedures."
+
+      }
+
+    };
+
+
+    /* ==========================================================
+       APPLICATION STATE
+    ========================================================== */
+
+    let currentStep = "start";
+
+    let history = [];
+
+
+    /* ==========================================================
+       DOM ELEMENTS
+    ========================================================== */
+
+    const card =
+      document.getElementById("decisionCard");
+
+    const progressBar =
+      document.getElementById("progressBar");
+
+    const progressText =
+      document.getElementById("progressText");
+
+    const progressPercent =
+      document.getElementById("progressPercent");
+
+    const breadcrumb =
+      document.getElementById("breadcrumb");
+
+    const historyContainer =
+      document.getElementById("historyContainer");
+
+    const historyList =
+      document.getElementById("historyList");
+
+
+    /* ==========================================================
+       RENDER
+    ========================================================== */
+
+    function render() {
+
+      const node =
+        steps[currentStep];
+
+      if (!node) {
+        return;
+      }
+
+
+      if (node.type === "question") {
+
+        renderQuestion(node);
+
+      }
+
+      else if (node.type === "action") {
+
+        renderAction(node);
+
+      }
+
+      else if (node.type === "outcome") {
+
+        renderOutcome(node);
+
+      }
+
+
+      updateProgress(node);
+
+      updateBreadcrumb(node);
+
+      updateHistory();
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    /* ==========================================================
+       QUESTION SCREEN
+    ========================================================== */
+
+    function renderQuestion(node) {
+
+      card.innerHTML = `
+
+        <div class="card-header">
+
+          <div class="step-label">
+            Decision point
+          </div>
+
+
+          <h2>
+            ${node.title}
+          </h2>
+
+
+          <p>
+            ${node.description}
+          </p>
+
+        </div>
+
+
+        <div class="card-body">
+
+          <div class="info-box">
+
+            <div class="info-icon">
+              i
+            </div>
+
+
+            <p>
+              Select the answer that best reflects your
+              government's review.
+            </p>
+
+          </div>
+
+
+          <div class="answer-grid">
+
+            <!-- YES -->
+
+            <button
+              class="answer-btn"
+              onclick="choose('yes')"
+              type="button"
+            >
+
+              <span class="answer-title">
+
+                <span class="answer-icon yes-icon">
+                  ✓
+                </span>
+
+                Yes
+
+              </span>
+
+
+              <span class="answer-description">
+                Continue based on the affirmative path.
+              </span>
+
+            </button>
+
+
+            <!-- NO -->
+
+            <button
+              class="answer-btn"
+              onclick="choose('no')"
+              type="button"
+            >
+
+              <span class="answer-title">
+
+                <span class="answer-icon no-icon">
+                  ×
+                </span>
+
+                No
+
+              </span>
+
+
+              <span class="answer-description">
+                Continue based on the negative path.
+              </span>
+
+            </button>
+
+          </div>
+
+
+          ${controls()}
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* ==========================================================
+       ACTION SCREEN
+    ========================================================== */
+
+    function renderAction(node) {
+
+      card.innerHTML = `
+
+        <div class="card-header">
+
+          <div class="step-label">
+            Action required
+          </div>
+
+
+          <h2>
+            ${node.title}
+          </h2>
+
+
+          <p>
+            ${node.description}
+          </p>
+
+        </div>
+
+
+        <div class="card-body">
+
+          <div class="action-box">
+
+            <h3>
+              ${node.actionTitle}
+            </h3>
+
+
+            <p>
+              ${node.actionText}
+            </p>
+
+          </div>
+
+
+          <div class="info-box">
+
+            <div class="info-icon">
+              i
+            </div>
+
+
+            <p>
+              Complete this review before continuing
+              to the next decision point.
+            </p>
+
+          </div>
+
+
+          <button
+            class="start-again"
+            style="margin-top:0;"
+            onclick="continueAction('${node.next}')"
+            type="button"
+          >
+
+            Continue
+
+            <span aria-hidden="true">
+              →
+            </span>
+
+          </button>
+
+
+          ${controls()}
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* ==========================================================
+       OUTCOME SCREEN
+    ========================================================== */
+
+    function renderOutcome(node) {
+
+      card.innerHTML = `
+
+        <div class="outcome ${node.style}">
+
+          <div class="outcome-icon">
+            ${node.icon}
+          </div>
+
+
+          <h2>
+            ${node.title}
+          </h2>
+
+
+          <p>
+            ${node.description}
+          </p>
+
+
+          <div class="outcome-action">
+
+            <strong>
+              ${node.actionTitle}
+            </strong>
+
+
+            <p>
+              ${node.actionText}
+            </p>
+
+          </div>
+
+
+          <button
+            class="start-again"
+            onclick="restart()"
+            type="button"
+          >
+
+            Start Over
+
+          </button>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* ==========================================================
+       YES / NO HANDLER
+    ========================================================== */
+
+    function choose(answer) {
+
+      const node =
+        steps[currentStep];
+
+      if (
+        !node ||
+        node.type !== "question"
+      ) {
+        return;
+      }
+
+
+      history.push({
+
+        step:
+          currentStep,
+
+        answer:
+          answer
+
+      });
+
+
+      currentStep =
+        node[answer];
+
+
+      render();
+
+    }
+
+
+    /* ==========================================================
+       ACTION CONTINUE
+    ========================================================== */
+
+    function continueAction(next) {
+
+      history.push({
+
+        step:
+          currentStep,
+
+        answer:
+          "completed"
+
+      });
+
+
+      currentStep =
+        next;
+
+
+      render();
+
+    }
+
+
+    /* ==========================================================
+       BACK BUTTON
+    ========================================================== */
+
+    function goBack() {
+
+      if (history.length === 0) {
+        return;
+      }
+
+
+      const previous =
+        history.pop();
+
+
+      currentStep =
+        previous.step;
+
+
+      render();
+
+    }
+
+
+    /* ==========================================================
+       RESTART
+    ========================================================== */
+
+    function restart() {
+
+      currentStep =
+        "start";
+
+      history = [];
+
+
+      render();
+
+    }
+
+
+    /* ==========================================================
+       CONTROLS
+    ========================================================== */
+
+    function controls() {
+
+      const canGoBack =
+        history.length > 0;
+
+
+      return `
+
+        <div class="controls">
+
+          <button
+            class="secondary-btn"
+            onclick="goBack()"
+            ${canGoBack ? "" : "disabled"}
+            type="button"
+          >
+
+            ← Back
+
+          </button>
+
+
+          <button
+            class="secondary-btn restart-btn"
+            onclick="restart()"
+            type="button"
+          >
+
+            Start Over
+
+          </button>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* ==========================================================
+       PROGRESS
+    ========================================================== */
+
+    function updateProgress(node) {
+
+      let percent;
+
+
+      if (node.type === "outcome") {
+
+        percent = 100;
+
+      }
+
+      else {
+
+        const progressMap = {
+
+          1: 14,
+
+          2: 28,
+
+          3: 42,
+
+          4: 57,
+
+          5: 71,
+
+          6: 85,
+
+          7: 94
+
+        };
+
+
+        percent =
+          progressMap[node.step] || 14;
+
+      }
+
+
+      progressBar.style.width =
+        `${percent}%`;
+
+
+      progressPercent.textContent =
+        `${percent}%`;
+
+
+      if (node.type === "outcome") {
+
+        progressText.textContent =
+          "Decision complete";
+
+      }
+
+      else {
+
+        progressText.textContent =
+          `Step ${node.step} of 7`;
+
+      }
+
+    }
+
+
+    /* ==========================================================
+       BREADCRUMB
+    ========================================================== */
+
+    function updateBreadcrumb(node) {
+
+      let label =
+        "Getting Started";
+
+
+      if (node.type === "question") {
+
+        label =
+          "Decision Point";
+
+      }
+
+
+      if (node.type === "action") {
+
+        label =
+          "Review / Action";
+
+      }
+
+
+      if (node.type === "outcome") {
+
+        label =
+          "Outcome";
+
+      }
+
+
+      breadcrumb.innerHTML = `
+
+        <span>
+          2030 LUCA
+        </span>
+
+        <span>
+          ›
+        </span>
+
+        <span>
+          ${label}
+        </span>
+
+      `;
+
+    }
+
+
+    /* ==========================================================
+       HISTORY
+    ========================================================== */
+
+    function updateHistory() {
+
+      if (history.length === 0) {
+
+        historyContainer.style.display =
+          "none";
+
+        return;
+
+      }
+
+
+      historyContainer.style.display =
+        "block";
+
+
+      historyList.innerHTML =
+        history
+          .map(item => {
+
+            const node =
+              steps[item.step];
+
+
+            let answerText =
+              "";
+
+
+            if (item.answer === "yes") {
+
+              answerText =
+                "Yes";
+
+            }
+
+            else if (item.answer === "no") {
+
+              answerText =
+                "No";
+
+            }
+
+            else {
+
+              answerText =
+                "Completed";
+
+            }
+
+
+            return `
+
+              <div class="history-item">
+
+${node.title} - ${answerText}
+
+
+              </div>
+
+            `;
+
+          })
+          .join("");
+
+    }
+
+
+    /* ==========================================================
+       START APPLICATION
+    ========================================================== */
+
+    render();
+
+  </script>
+
+</body>
+</html>
