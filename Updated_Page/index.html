@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>2030 Census • LUCA Participant Workflow</title>
+
+  <style>
+    :root {
+      --navy:#17365d;
+      --blue:#0071bc;
+      --blue-dark:#005ea8;
+      --blue-light:#e8f4fb;
+
+      --gold:#fdb81e;
+      --gold-light:#fff8df;
+
+      --green:#168a45;
+      --green-light:#e9f7ef;
+
+      --red:#c93434;
+      --red-light:#fff0f0;
+
+      --gray-900:#1f2933;
+      --gray-700:#4b5563;
+      --gray-600:#5f6b77;
+      --gray-500:#6b7280;
+      --gray-300:#d1d5db;
+      --gray-200:#e5e7eb;
+      --gray-100:#f3f4f6;
+      --white:#fff;
+
+      --radius:14px;
+      --shadow-lg:0 12px 32px rgba(23,54,93,.12);
+      --shadow-sm:0 6px 16px rgba(23,54,93,.10);
+    }
+
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      color:var(--gray-900);
+      background:linear-gradient(180deg,#f5f9fc 0%,#ffffff 40%,#f5f9fc 100%);
+    }
+
+    /* Header */
+    header {
+      background:var(--navy);
+      color:#fff;
+      border-bottom:5px solid var(--gold);
+    }
+    .header-inner {
+      max-width:1100px; margin:0 auto; padding:22px 16px;
+      display:flex; gap:18px; align-items:flex-start;
+    }
+    .seal {
+      width:36px;height:36px;border:2px solid #fff;border-radius:50%;
+      display:grid;place-items:center;font-weight:800;
+    }
+    h1 { margin:4px 0 6px; font-size:clamp(22px,4vw,34px); line-height:1.2; }
+    header p { margin:6px 0 0; color:#dce9f5; max-width:840px; }
+
+    /* Layout */
+    .app {
+      max-width:1100px; margin:0 auto; padding:22px 16px;
+      display:grid; grid-template-columns:260px 1fr; gap:20px;
+    }
+    @media (max-width:900px){ .app { grid-template-columns:1fr; } }
+
+    /* Sidebar */
+    .sidebar {
+      background:#fff; border:1px solid var(--gray-200); border-radius:10px; box-shadow:var(--shadow-sm);
+      position:sticky; top:16px; padding:12px; height:max-content;
+    }
+    .sidebar h3 {
+      margin:0 0 8px; font-size:14px; color:var(--gray-700);
+      font-weight:800; text-transform:lowercase;
+    }
+    .sidebar ul { list-style:none; margin:0; padding:0; }
+    .sidebar li a {
+      display:block; padding:7px 9px; border-radius:6px; color:var(--navy);
+      text-decoration:none; border:1px solid transparent; font-size:14px;
+    }
+    .sidebar li a:hover { background:var(--blue-light); border-color:var(--blue); }
+    .sidebar li.active a { background:var(--blue-light); border-color:var(--blue); font-weight:800; }
+
+    /* Progress */
+    .progress { margin-bottom:16px; }
+    .progress-top {
+      display:flex; justify-content:space-between; align-items:center;
+      color:var(--gray-700); font-weight:600; margin-bottom:6px;
+    }
+    .track { height:8px; background:var(--gray-200); border-radius:999px; overflow:hidden; }
+    .bar   { height:100%; width:12%; background:var(--blue); border-radius:inherit; transition:width .35s ease; }
+
+    /* Breadcrumb */
+    .crumb { display:flex; gap:8px; align-items:center; color:var(--gray-600); font-size:13px; margin:10px 0 14px; }
+    .crumb span:last-child { color:var(--navy); font-weight:700; }
+
+    /* Card */
+    .card {
+      background:#fff; border:1px solid var(--gray-200); border-radius:var(--radius); box-shadow:var(--shadow-lg); overflow:hidden;
+      animation:cardIn .35s ease;
+    }
+    @keyframes cardIn { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+    .card-header { background:#f8fbfd; border-bottom:1px solid var(--gray-200); padding:20px; }
+    .label {
+      display:inline-flex; gap:8px; background:var(--blue-light); color:var(--blue-dark);
+      padding:7px 11px; border-radius:999px; font-size:12px; font-weight:800;
+      text-transform:uppercase; letter-spacing:.04em; margin-bottom:10px;
+    }
+    .card-header h2 { margin:0; font-size:clamp(20px,3.6vw,28px); color:var(--navy); }
+    .card-header p { margin:8px 0 0; color:var(--gray-700); max-width:780px; line-height:1.6; }
+    .card-body { padding:20px; }
+
+    /* Info / Action boxes */
+    .info {
+      display:flex; gap:12px; background:var(--gray-100);
+      border-left:4px solid var(--blue); padding:14px; border-radius:10px; margin:18px 0;
+    }
+    .info .i {
+      width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff;font-weight:900;
+    }
+    .box {
+      border:1px solid var(--gray-200); border-radius:10px; padding:16px; background:#fff; margin-bottom:18px;
+    }
+    .box h3 { margin:0 0 8px; color:var(--navy); font-size:18px; }
+    .links { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
+    .link-btn {
+      display:inline-block; padding:9px 12px; border-radius:8px; border:1px solid var(--blue-dark);
+      color:var(--blue-dark); background:var(--blue-light); font-weight:800; text-decoration:none;
+    }
+    .link-btn:hover { background:#d4ecfa; }
+
+    /* Buttons */
+    .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    @media (max-width:600px){ .grid { grid-template-columns:1fr; } }
+    .btn {
+      border:2px solid var(--gray-300); background:#fff; color:var(--gray-900);
+      padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer;
+      transition:border-color .2s, background .2s, transform .15s, box-shadow .2s;
+    }
+    .btn:hover { border-color:var(--blue); background:var(--blue-light); transform:translateY(-1px); box-shadow:0 6px 16px rgba(0,113,188,.12); }
+    .title { display:flex; align-items:center; gap:10px; font-weight:800; }
+    .chip { width:24px; height:24px; border-radius:50%; display:grid; place-items:center; color:#fff; font-weight:900; }
+    .yes { background:var(--green); } .no { background:var(--red); }
+    .sub { display:block; margin:6px 0 0 34px; color:var(--gray-500); font-size:13px; }
+
+    .controls { display:flex; justify-content:space-between; gap:12px; margin-top:14px; }
+    .secondary {
+      border:1px solid var(--gray-300); background:#fff; color:var(--gray-700);
+      padding:10px 14px; border-radius:8px; font-weight:700; cursor:pointer;
+    }
+    .secondary:hover   { background:var(--gray-100); color:var(--navy); }
+    .secondary[disabled]{ opacity:.45; cursor:not-allowed; }
+    .primary { border:none; background:var(--blue); color:#fff; padding:12px 18px; border-radius:8px; font-weight:800; cursor:pointer; }
+    .primary:hover{ background:var(--blue-dark); }
+
+    /* Outcomes */
+    .outcome { padding:28px 22px; text-align:center; }
+    .o-icon { width:70px; height:70px; margin:0 auto 14px; border-radius:50%; display:grid; place-items:center; font-size:32px; font-weight:900; }
+    .success .o-icon{ background:var(--green-light); color:var(--green); }
+    .warn .o-icon   { background:var(--gold-light);  color:#8a5a00; }
+    .outcome h2 { margin:0; color:var(--navy); }
+    .outcome p  { max-width:720px; margin:10px auto 0; color:var(--gray-700); line-height:1.65; }
+    .callout { max-width:720px; margin:16px auto 0; text-align:left; background:var(--gray-100); border-radius:10px; padding:14px 16px; }
+    .callout strong { color:var(--navy); }
+
+    /* History */
+    .history { background:#fff; border:1px solid var(--gray-200); border-radius:10px; padding:14px; margin-top:16px; }
+    .history h4 { margin:0 0 8px; color:var(--gray-700); text-transform:uppercase; font-size:12px; letter-spacing:.04em; }
+    .list { display:flex; flex-wrap:wrap; gap:8px; }
+    .pill { background:var(--gray-100); color:var(--gray-700); border-radius:6px; padding:6px 9px; font-size:12px; }
+
+    /* Footer notice */
+    .notice { margin-top:20px; color:var(--gray-600); font-size:12px; text-align:center; }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <div class="seal" aria-hidden="true">US</div>
+      <div>
+        <div style="font-weight:700;letter-spacing:.03em;opacity:.95">2030 Census • LUCA Participant Workflow</div>
+        <h1>Local Update of Census Addresses (LUCA)</h1>
+        <p>Follow this guided workflow to prepare your address data, create block count lists, and determine whether LUCA address‑level review is needed.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="Participant workflow">
+      <h3>participant workflow</h3>
+      <ul id="nav"><!-- filled by JS --></ul>
+    </aside>
+
+    <!-- Main -->
+    <main>
+      <!-- Progress -->
+      <div class="progress">
+        <div class="progress-top">
+          <span id="pText">Step 1 of 8</span>
+          <span id="pPct">12%</span>
+        </div>
+        <div class="track"><div class="bar" id="pBar"></div></div>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="crumb" id="crumb"><span>2030 LUCA</span><span>›</span><span>Getting Started</span></div>
+
+      <!-- Card -->
+      <section class="card" id="card" aria-live="polite"><!-- inserted by JS --></section>
+
+      <!-- History -->
+      <div class="history" id="hist" style="display:none">
+        <h4>Your path</h4>
+        <div class="list" id="histList"></div>
+      </div>
+
+      <!-- Footer notice -->
+      <div class="notice">
+        This guide reflects the workflow shown in the uploaded screenshots. It is a navigation aid and does not replace official U.S. Census Bureau LUCA instructions or requirements.
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /* ========= Workflow steps (polished text from screenshots only) ========= */
+    const steps = {
+      start: {
+        type: "question", step: 1,
+        title: "Do you have an Address List?",
+        description: "",
+        yes: "convertPAL",
+        no: "createList"
+      },
+
+      createList: {
+        type: "action", step: 2,
+        title: "Creating an Address List",
+        description:
+`If you do not already have an address list, the best practice is to create one that fits your organization's business needs. One widely used example is the National Address Database (NAD) schema developed by the U.S. Department of Transportation.
+
+However, the 2030 LUCA program requires address data to follow a specific template in order to work with the LUCA processing tools. Even if your organization maintains an address list in another format, the data must be placed into the LUCA template before it can be used with these tools.`,
+        action: { label: "Next", next: "convertPAL" }
+      },
+
+      convertPAL: {
+        type: "action", step: 3,
+        title: "Participant Address List Template",
+        description:
+`The 2030 LUCA process requires all incoming data to be submitted in a specific format. This requirement exists because LUCA processing tools depend on standardized fields and formatting to function correctly.
+
+To ensure your data can be successfully reviewed and processed, please use the Participant Address List Template.
+
+Although the template is in Excel format, the Census Bureau advises converting the formatting to a pipe‑delimited file type (.psv or .txt). This ensures best performance of Census LUCA tools.`,
+        links: [{ text: "Click here to download the Participant Address List Template", href: "#" }],
+        question: {
+          text: "Are your address records up to date with the most recent Geocode information?",
+          yesNext: "createBlockList",
+          noNext: "geocode"
+        }
+      },
+
+      geocode: {
+        type: "action", step: 4,
+        title: "Geocoding Your Address List",
+        description:
+`If your addresses are not already geocoded, you can use the Batch LUCA Geocoding tool available in the “LUCA” tab to add geographic coordinates.
+
+You may also use geocoding methods that fit your internal workflows. Many organizations use their own GIS systems together with the currently published partnership shapefiles.
+
+To use the geocoding tools, each record must include either a ZIP Code or geographic coordinates.
+
+• If coordinates are already included in the Participant Address List, the geocoder will use those values.
+• If coordinates are not available, the geocoder will attempt to determine the correct location using the address and ZIP Code.
+
+If a coordinate is not included with an address record, the geocoder will use address range geocoding to estimate the location. This method places the coordinate based on the address range along a road segment. Because of this, the resulting coordinate is often placed at an offset from the road centerline rather than directly on top of the actual living quarters. This is expected behavior for address range geocoding.
+
+During the LUCA Review Phase, you will have the opportunity to review and correct these locations if you choose to participate. This allows you to improve the positional accuracy of addresses before final submission.`,
+        links: [{ text: "Click here for Geocoding Tool", href: "#" }],
+        action: { label: "Next", next: "createBlockList" }
+      },
+
+      createBlockList: {
+        type: "action", step: 5,
+        title: "Creating an Address Count Listing File",
+        description:
+`After preparing your address data, you will need to create an Address Count Listing file based on your dataset.
+
+This can be done using the “Batch LUCA Block Count List” option located in the LUCA tab of the Geocoder. This tool will generate the required address count listing based on the addresses in your dataset.
+
+Alternatively, you may choose to use GIS‑based methods to create this file. Many participants perform this task using their internal GIS systems together with the currently published partnership shapefiles.
+
+Use the method that best fits your workflow, ensuring the final file reflects the address counts derived from your data.
+
+When you run the “Batch LUCA Block Count List” tool, it will generate an Address Count Listing file based on your address dataset.
+
+The output file includes the block GEOID for each record, using the currently published census blocks. This allows the addresses in your dataset to be summarized and organized by block for LUCA processing.
+
+Review the output to ensure the address counts and block assignments align with your data before moving forward in the workflow.`,
+        links: [
+          { text: "Click here for Geocoding Tool", href: "#" },
+          { text: "Click Here for Partnership Shapefiles", href: "#" }
+        ],
+        action: { label: "Next", next: "compareCounts" }
+      },
+
+      compareCounts: {
+        type: "question", step: 6,
+        title: "Compare your Address Count Listing to the published, non‑Title 13 LUCA address counts",
+        description:
+`1. Download the published address count data from the LUCA webpage.
+2. Join the datasets you created using the block_geoid field as the common geographic identifier.
+3. Compare the address counts to identify census blocks where the totals differ.
+
+Participants may use any method that works best with their resources, including:
+
+• Spreadsheet tools (such as the vlookup function in Excel or similar software)
+• GIS software
+• Database joins
+
+Focus on identifying blocks where address counts differ, as these areas may require additional review during the LUCA Review Phase.`,
+        links: [{ text: "Click here to download the Address Count Listing Files", href: "#" }],
+        ask: "Do the address counts match at the census block level?",
+        yes: "countsSame",
+        no: "countsDifferent"
+      },
+
+      countsSame: {
+        type: "outcome", step: 7, style: "success",
+        icon: "✓", title: "Address Counts Match",
+        description:
+`If the address counts match, or differences are minimal and acceptable, you may determine that participating in the LUCA Review Phase is not necessary. This suggests that residential address coverage is likely already reflected in the Census Bureau’s address list, and those housing units will be included in enumeration.
+
+However, we recommend checking the block count lists again during the LUCA preparation phase in case your local address counts or housing development activities have changed substantially.`
+      },
+
+      countsDifferent: {
+        type: "outcome", step: 8, style: "warn",
+        icon: "!", title: "If Address Counts Do Not Match",
+        description:
+`If the address counts differ at the census block level, this may indicate potential gaps between your local address data and the Census Bureau’s address list.
+
+Large or consistent differences may suggest:
+
+• Missing residential addresses
+• Living Quarters in the wrong block
+• New housing development or recent construction
+• Differences in address classification or timing of data updates
+
+In these cases, participating in LUCA may help ensure the Census Bureau’s address list reflects the most complete and current residential address coverage for your jurisdiction.`,
+        callout:
+`Recommended actions:
+• Review the census blocks where differences occur
+• Identify areas with the largest discrepancies
+• Use this information to help prioritize your LUCA address review and submission
+
+This approach can help focus your time and resources on the areas most likely to benefit from LUCA participation.`
+      }
+    };
+
+    /* ========= UI scaffolding ========= */
+    const el = {
+      card:    document.getElementById("card"),
+      pBar:    document.getElementById("pBar"),
+      pText:   document.getElementById("pText"),
+      pPct:    document.getElementById("pPct"),
+      crumb:   document.getElementById("crumb"),
+      nav:     document.getElementById("nav"),
+      hist:    document.getElementById("hist"),
+      histList:document.getElementById("histList"),
+    };
+
+    const sidebarOrder = [
+      ["start","Start"],
+      ["convertPAL","Convert to PAL"],
+      ["createList","Create Address List"],
+      ["geocode","Needs Geocoding"],
+      ["createBlockList","Create Block Count list"],
+      ["compareCounts","Compare Block Counts"],
+      ["countsSame","Block Counts Same"],
+      ["countsDifferent","Block Counts Different"]
+    ];
+
+    let current = "start";
+    let trail = [];
+
+    function renderSidebar(){
+      el.nav.innerHTML = sidebarOrder.map(([id,label])=>{
+        const active = id===current ? ' class="active"' : '';
+        return `<li${active}>#${label}</a></li>`;
+      }).join("");
+    }
+    function go(id){
+      if(steps[id]){ current=id; render(); }
+    }
+
+    function render(){
+      renderSidebar();
+      const node = steps[current];
+
+      // breadcrumb
+      const crumbLabel =
+        node.type==="question" ? "Decision Point" :
+        node.type==="action"   ? "Review / Action" :
+        "Outcome";
+      el.crumb.innerHTML = `<span>2030 LUCA</span><span>›</span><span>${crumbLabel}</span>`;
+
+      // progress
+      const pctMap = {1:12,2:24,3:36,4:48,5:60,6:72,7:88,8:100};
+      const pct    = pctMap[node.step] || 12;
+      el.pBar.style.width = pct + "%";
+      el.pPct.textContent = pct + "%";
+      el.pText.textContent = node.type==="outcome" ? "Decision complete" : `Step ${node.step} of 8`;
+
+      // card
+      if(node.type==="question") renderQuestion(node);
+      else if(node.type==="action") renderAction(node);
+      else renderOutcome(node);
+
+      updateHistory();
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    function renderQuestion(node){
+      const ask = node.ask
+        ? `<div class="info"><div class="i">i</div><p>${node.ask}</p></div>`
+        : "";
+      el.card.innerHTML = `
+        <div class="card-header">
+          <div class="label">Decision point</div>
+          <h2>${node.title}</h2>
+          ${node.description ? `<p>${node.description.replace(/\n/g,"<br/>")}</p>` : ""}
+        </div>
+        <div class="card-body">
+          ${ask}
+          <div class="grid">
+            <button class="btn" onclick="choose('yes')" type="button">
+              <span class="title"><span class="chip yes">✓</span> Yes</span>
+              <span class="sub">Continue based on the affirmative path.</span>
+            </button>
+            <button class="btn" onclick="choose('no')" type="button">
+              <span class="title"><span class="chip no">×</span> No</span>
+              <span class="sub">Continue based on the alternate path.</span>
+            </button>
+          </div>
+          ${controls()}
+        </div>`;
+    }
+
+    function renderAction(node){
+      const linkHTML = (node.links?.length)
+        ? `<div class="links">${node.links.map(l=>`${l.href}${l.text}</a>`).join("")}</div>`
+        : "";
+
+      const palQ = node.question
+        ? `
+          <div class="info">
+            <div class="i">i</div>
+            <p><strong>Question:</strong> ${node.question.text}</p>
+          </div>
+          <div class="grid" aria-label="Geocode up-to-date">
+            <button class="btn" onclick="palBranch('yes')" type="button">
+              <span class="title"><span class="chip yes">✓</span> Yes</span>
+              <span class="sub">Proceed without geocoding.</span>
+            </button>
+            <button class="btn" onclick="palBranch('no')" type="button">
+              <span class="title"><span class="chip no">×</span> No</span>
+              <span class="sub">Add coordinates with the Geocoder before continuing.</span>
+            </button>
+          </div>`
+        : "";
+
+      const nextBtn = node.action
+        ? `<button class="primary" onclick="advance('${node.action.next}')" type="button">${node.action.label} →</button>`
+        : "";
+
+      el.card.innerHTML = `
+        <div class="card-header">
+          <div class="label">Review / Action</div>
+          <h2>${node.title}</h2>
+          <p>${node.description.replace(/\n/g,"<br/>")}</p>
+        </div>
+        <div class="card-body">
+          <div class="box">
+            ${node.links?.length ? `<h3>Links</h3>` : ""}
+            ${linkHTML}
+          </div>
+
+          ${palQ}
+
+          <div class="info">
+            <div class="i">i</div>
+            <p>Complete this step before continuing to the next decision point.</p>
+          </div>
+
+          ${nextBtn}
+          ${controls()}
+        </div>`;
+    }
+
+    function renderOutcome(node){
+      el.card.innerHTML = `
+        <div class="outcome ${node.style==='success' ? 'success' : 'warn'}">
+          <div class="o-icon">${node.icon}</div>
+          <h2>${node.title}</h2>
+          <p>${node.description.replace(/\n/g,"<br/>")}</p>
+          ${node.callout ? `<div class="callout"><strong>Recommended next steps</strong><p style="margin-top:6px">${node.callout.replace(/\n/g,"<br/>")}</p></div>` : ""}
+          <button class="primary" onclick="restart()" type="button">Start Over</button>
+        </div>`;
+    }
+
+    function controls(){
+      const canBack = trail.length>0;
+      return `
+        <div class="controls">
+          <button class="secondary" ${canBack ? "" : "disabled"} onclick="back()" type="button">← Back</button>
+          <button class="secondary" onclick="restart()" type="button">Start Over</button>
+        </div>`;
+    }
+
+    /* handlers */
+    function choose(ans){
+      const node = steps[current];
+      if(!node || node.type!=="question") return;
+      trail.push({step:current,answer:ans});
+      current = node[ans];
+      render();
+    }
+    function advance(next){
+      trail.push({step:current,answer:"completed"});
+      current = next;
+      render();
+    }
+    function palBranch(ans){
+      const q = steps.convertPAL.question;
+      trail.push({step:"convertPAL",answer:ans});
+      current = ans==="yes" ? q.yesNext : q.noNext;
+      render();
+    }
+    function back(){
+      if(trail.length===0) return;
+      const prev = trail.pop();
+      current = prev.step;
+      render();
+    }
+    function restart(){
+      current="start"; trail=[]; render();
+    }
+
+    /* history */
+    function updateHistory(){
+      if(trail.length===0){ el.hist.style.display="none"; return; }
+      el.hist.style.display="block";
+      el.histList.innerHTML = trail.map(t=>{
+        const n = steps[t.step];
+        const a = t.answer==="yes" ? "Yes" : t.answer==="no" ? "No" : "Completed";
+        return `<span class="pill">${n.title} — ${a}</span>`;
+      }).join("");
+    }
+
+    /* sidebar bootstrap */
+    function buildSidebar(){
+      el.nav.innerHTML = sidebarOrder.map(([id,label])=>{
+        const active = id===current ? ' class="active"' : '';
+        return `<li${active}>#${label}</a></li>`;
+      }).join("");
+      // make links clickable
+      Array.from(el.nav.querySelectorAll("a")).forEach((a,i)=>{
+        a.addEventListener("click", (ev)=>{
+          ev.preventDefault();
+          const id = sidebarOrder[i][0];
+          go(id);
+        });
+      });
+    }
+
+    function renderSidebar(){
+      buildSidebar();
+      // toggle active li
+      const items = el.nav.querySelectorAll("li");
+      items.forEach((li,i)=>{
+        const id = sidebarOrder[i][0];
+        if(id===current) li.classList.add("active"); else li.classList.remove("active");
+      });
+    }
+
+    // Start app
+    buildSidebar();
+    render();
+  </script>
+</body>
+</html>
