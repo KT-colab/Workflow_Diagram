@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>2030 Census • LUCA Participant Workflow</title>
+
+  <style>
+    :root {
+      --navy:#17365d;
+      --blue:#0071bc;
+      --blue-dark:#005ea8;
+      --blue-light:#e8f4fb;
+
+      --gold:#fdb81e;
+      --gold-light:#fff8df;
+
+      --green:#168a45;
+      --green-light:#e9f7ef;
+
+      --red:#c93434;
+      --red-light:#fff0f0;
+
+      --gray-900:#1f2933;
+      --gray-700:#4b5563;
+      --gray-600:#5f6b77;
+      --gray-500:#6b7280;
+      --gray-300:#d1d5db;
+      --gray-200:#e5e7eb;
+      --gray-100:#f3f4f6;
+      --white:#fff;
+
+      --radius:14px;
+      --shadow-lg:0 12px 32px rgba(23,54,93,.12);
+      --shadow-sm:0 6px 16px rgba(23,54,93,.10);
+    }
+
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      color:var(--gray-900);
+      background:linear-gradient(180deg,#f5f9fc 0%,#ffffff 40%,#f5f9fc 100%);
+    }
+
+    header {
+      background:var(--navy);
+      color:#fff;
+      border-bottom:5px solid var(--gold);
+    }
+    .header-inner {
+      max-width:1100px; margin:0 auto; padding:22px 16px;
+      display:flex; gap:18px; align-items:flex-start;
+    }
+    .seal { width:36px;height:36px;border:2px solid #fff;border-radius:50%;
+      display:grid;place-items:center;font-weight:800; }
+    h1 { margin:4px 0 6px; font-size:clamp(22px,4vw,34px); line-height:1.2; }
+    header p { margin:6px 0 0; color:#dce9f5; max-width:840px; }
+
+    .app {
+      max-width:1100px; margin:0 auto; padding:22px 16px;
+      display:grid; grid-template-columns:260px 1fr; gap:20px;
+    }
+    @media (max-width:900px){ .app { grid-template-columns:1fr; } }
+
+    .sidebar {
+      background:#fff; border:1px solid var(--gray-200); border-radius:10px;
+      box-shadow:var(--shadow-sm); position:sticky; top:16px; padding:12px;
+      height:max-content;
+    }
+    .sidebar h3 {
+      margin:0 0 8px; font-size:14px; color:var(--gray-700);
+      font-weight:800; text-transform:lowercase;
+    }
+    .sidebar ul { list-style:none; margin:0; padding:0; }
+    .sidebar li { margin:2px 0; }
+    .sidebar li a {
+      display:block; padding:7px 9px; border-radius:6px; color:var(--navy);
+      text-decoration:none; border:1px solid transparent; font-size:14px;
+    }
+    .sidebar li a:hover { background:var(--blue-light); border-color:var(--blue); }
+    .sidebar li.active a { background:var(--blue-light); border-color:var(--blue);
+      font-weight:800; }
+
+    .progress { margin-bottom:16px; }
+    .progress-top { display:flex; justify-content:space-between; align-items:center;
+      color:var(--gray-700); font-weight:600; margin-bottom:6px; }
+    .track { height:8px; background:var(--gray-200); border-radius:999px; overflow:hidden; }
+    .bar   { height:100%; width:12%; background:var(--blue); border-radius:inherit;
+      transition:width .35s ease; }
+
+    .crumb { display:flex; gap:8px; align-items:center; color:var(--gray-600);
+      font-size:13px; margin:10px 0 14px; }
+    .crumb span:last-child { color:var(--navy); font-weight:700; }
+
+    .card {
+      background:#fff; border:1px solid var(--gray-200); border-radius:var(--radius);
+      box-shadow:var(--shadow-lg); overflow:hidden;
+      animation:cardIn .35s ease;
+    }
+    @keyframes cardIn { from{opacity:0; transform:translateY(8px);}
+      to{opacity:1; transform:translateY(0);} }
+
+    .card-header { background:#f8fbfd; border-bottom:1px solid var(--gray-200); padding:20px; }
+    .label {
+      display:inline-flex; gap:8px; background:var(--blue-light); color:var(--blue-dark);
+      padding:7px 11px; border-radius:999px; font-size:12px; font-weight:800;
+      text-transform:uppercase; letter-spacing:.04em; margin-bottom:10px;
+    }
+    .card-header h2 { margin:0; font-size:clamp(20px,3.6vw,28px); color:var(--navy); }
+    .card-header p { margin:8px 0 0; color:var(--gray-700); max-width:780px; line-height:1.6; }
+
+    .card-body { padding:20px; }
+    .card-body ul, .card-body ol { margin:10px 0 0 24px; }
+
+    .box {
+      border:1px solid var(--gray-200); border-radius:10px; padding:16px;
+      background:#fff; margin:14px 0;
+    }
+    .box h3 { margin:0 0 8px; color:var(--navy); font-size:18px; }
+
+    .accordion {
+      border:1px solid var(--gray-200); border-radius:10px; background:#fff;
+      margin:14px 0;
+    }
+    .accordion summary {
+      cursor:pointer; padding:12px 16px; list-style:none;
+      font-weight:800; color:var(--navy);
+    }
+    .accordion summary::-webkit-details-marker { display:none; }
+    .chev { display:inline-block; margin-right:8px; transition:transform .2s ease; }
+    .accordion[open] .chev { transform:rotate(90deg); }
+    .accordion .content { padding:0 16px 16px; border-top:1px solid var(--gray-200); }
+
+    .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    @media (max-width:600px){ .grid { grid-template-columns:1fr; } }
+    .btn {
+      border:2px solid var(--gray-300); background:#fff; color:var(--gray-900);
+      padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer;
+      transition:border-color .2s, background .2s, transform .15s, box-shadow .2s;
+    }
+    .btn:hover {
+      border-color:var(--blue); background:var(--blue-light);
+      transform:translateY(-1px); box-shadow:0 6px 16px rgba(0,113,188,.12);
+    }
+    .title { display:flex; align-items:center; gap:10px; font-weight:800; }
+    .chip { width:24px; height:24px; border-radius:50%; display:grid;
+      place-items:center; color:#fff; font-weight:900; }
+    .yes { background:var(--green); }
+    .no { background:var(--red); }
+
+    .controls {
+      display:flex; justify-content:space-between; gap:12px; margin-top:14px;
+    }
+    .secondary {
+      border:1px solid var(--gray-300); background:#fff; color:var(--gray-700);
+      padding:10px 14px; border-radius:8px; font-weight:700; cursor:pointer;
+    }
+    .secondary:hover   { background:var(--gray-100); color:var(--navy); }
+    .secondary[disabled]{ opacity:.45; cursor:not-allowed; }
+    .primary {
+      border:none; background:var(--blue); color:#fff;
+      padding:12px 18px; border-radius:8px; font-weight:800; cursor:pointer;
+    }
+    .primary:hover{ background:var(--blue-dark); }
+
+    .outcome { padding:28px 22px; text-align:center; }
+    .o-icon { width:70px; height:70px; margin:0 auto 14px; border-radius:50%;
+      display:grid; place-items:center; font-size:32px; font-weight:900; }
+    .success .o-icon{ background:var(--green-light); color:var(--green); }
+    .warn .o-icon   { background:var(--gold-light);  color:#8a5a00; }
+
+    .outcome h2 { margin:0; color:var(--navy); }
+    .outcome p  { max-width:720px; margin:10px auto 0; color:var(--gray-700); line-height:1.65; }
+
+    .callout {
+      max-width:720px; margin:16px auto 0; text-align:left;
+      background:var(--gray-100); border-radius:10px; padding:14px 16px;
+    }
+    .callout strong { color:var(--navy); }
+
+    .history { background:#fff; border:1px solid var(--gray-200);
+      border-radius:10px; padding:14px; margin-top:16px; }
+    .history h4 { margin:0 0 8px; color:var(--gray-700);
+      text-transform:uppercase; font-size:12px; letter-spacing:.04em; }
+    .pill { background:var(--gray-100); color:var(--gray-700); border-radius:6px;
+      padding:6px 9px; font-size:12px; margin:4px; display:inline-block; }
+
+    .notice { margin-top:20px; color:var(--gray-600);
+      font-size:12px; text-align:center; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="seal">US</div>
+      <div>
+        <div style="font-weight:700;letter-spacing:.03em;opacity:.95">
+          2030 Census • LUCA Participant Workflow
+        </div>
+        <h1>Local Update of Census Addresses (LUCA)</h1>
+        <p>This workflow includes original content AND expandable webinar-guidance panels inside each step.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="app">
+    <aside class="sidebar">
+      <h3>participant workflow</h3>
+      <ul id="nav"></ul>
+    </aside>
+
+    <main>
+      <div class="progress">
+        <div class="progress-top">
+          <span id="pText">Step 1 of 8</span>
+          <span id="pPct">12%</span>
+        </div>
+        <div class="track">
+          <div class="bar" id="pBar"></div>
+        </div>
+      </div>
+
+      <div class="crumb" id="crumb">
+        <span>2030 LUCA</span><span>›</span><span>Step</span>
+      </div>
+
+      <section class="card" id="card"></section>
+
+      <div class="history" id="hist" style="display:none">
+        <h4>Your path</h4>
+        <div id="histList"></div>
+      </div>
+
+      <div class="notice">
+        This guide integrates official LUCA content with training webinar guidance.
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /* ========= Option 2: Augmented Workflow + Smart Panels (Collapsible inside card) =========
+       - Original workflow logic (8 steps) preserved
+       - Original content shown by default
+       - Augmented guidance inserted as collapsible <details> panels
+    */
+    
+    const steps = {
+      start: {
+        type: "question", step: 1,
+        title: "Do you have an Address List?",
+        description: "",
+        yes: "convertPAL",
+        no: "createList",
+        originalHTML: `
+          <div class="box">
+            <h3><strong>Original content (kept as‑is)</strong></h3>
+            <p><strong>Buttons shown to users:</strong></p>
+            <ul>
+              <li><strong>Yes</strong> — Continue based on the affirmative path</li>
+              <li><strong>No</strong> — Continue based on the alternate path</li>
+            </ul>
+          </div>
+        `,
+        augmentedHTML: `
+          <details class="accordion">
+            <summary><span class="chev">▶</span> Augmented guidance (from webinar)</summary>
+            <div class="content">
+              <p><strong>Why this step matters:</strong></p>
+              <p>LUCA participation begins with reviewing and comparing your residential address list to Census block counts.</p>
+              <p><strong>Before answering, consider:</strong></p>
+              <ul>
+                <li>Does your government maintain a residential address list?</li>
+                <li>Which office maintains it?</li>
+                <li>Are ADUs, HHUs, group quarters included?</li>
+                <li>Are rural / non‑city‑style addresses included?</li>
+                <li>Is construction tracked?</li>
+              </ul>
+              <p><strong>Common confusion:</strong></p>
+              <ul>
+                <li>List may be incomplete</li>
+                <li>Relying only on USPS/utility data</li>
+                <li>No master consolidated list</li>
+              </ul>
+            </div>
+          </details>
+        `
+      },
+    
+      createList: {
+        type: "action", step: 2,
+        title: "Creating an Address List",
+        description:
+    `If you do not already have an address list, the best practice is to create one that fits your organization's business needs. One widely used example is the National Address Database (NAD) schema developed by the U.S. Department of Transportation.
+    <br><br>
+    However, the 2030 LUCA program requires address data to follow a specific template in order to work with the LUCA processing tools. Even if your organization maintains an address list in another format, the data must be placed into the LUCA template before it can be used with these tools.`,
+        originalHTML: `
+          <div class="box">
+            <h3><strong>Original content (kept as‑is)</strong></h3>
+            <p>The text above describes creating a list aligned with the 2030 LUCA template.</p>
+          </div>
+        `,
+        augmentedHTML: `
+          <details class="accordion">
+            <summary><span class="chev">▶</span> Augmented guidance (from webinar)</summary>
+            <div class="content">
+              <p><strong>A complete address list should include:</strong></p>
+              <ul>
+                <li>All housing units</li>
+                <li>ADUs (Accessory Dwelling Units)</li>
+                <li>HHUs (Hidden Housing Units)</li>
+                <li>Group Quarters (GQs)</li>
+                <li>Non‑city‑style addresses</li>
+                <li>New construction visible in imagery</li>
+                <li>Units not in USPS</li>
+                <li>Addresses identified by local knowledge</li>
+              </ul>
+            </div>
+          </details>
+        `,
+        action: { label: "Next", next: "convertPAL" }
+      },
+    
+      convertPAL: {
+        type: "action", step: 3,
+        title: "Participant Address List Template",
+        description:
+    `The 2030 LUCA process requires all incoming data to be submitted in a specific format.
+    <br><br>
+    To ensure your data can be successfully reviewed and processed, please use the Participant Address List Template.
+    <br><br>
+    Although the template is in Excel format, convert it to a pipe‑delimited file (.psv or .txt) for best performance.`,
+        links: [{ text: "Click here to download the Participant Address List Template", href: "#" }],
+        originalHTML: `
+          <div class="box">
+            <h3><strong>Original content (kept as‑is)</strong></h3>
+            <p>The PAL template ensures standardized LUCA processing.</p>
+          </div>
+        `,
+        augmentedHTML: `
+          <details class="accordion">
+            <summary><span class="chev">▶</span> Augmented guidance (from webinar)</summary>
+            <div class="content">
+              <p><strong>PAL required fields:</strong></p>
+              <ul>
+                <li>RECORD_ID</li>
+                <li>COMPLETE_ADDRESS_NUMBER</li>
+                <li>COMPLETE_STREET_NAME</li>
+                <li>COMPLETE_SUBADDRESS</li>
+                <li>ZIP_CODE or ENTITY_GEOID</li>
+                <li>CITY_STYLE_ADDRESS_FLAG</li>
+              </ul>
+              <p><strong>ADU/HHU formatting:</strong> ADU1, ADU2 / HHU1, HHU2 — no asterisks.</p>
+              <p><strong>GQ fields:</strong> E_GQTLFLAG, E_GQTLTYPE, E_GQTL_NAME, E_GQFACILITY_NAME</p>
+              <p><strong>Pipe‑delimited requirement:</strong> Replace tabs with “|”.</p>
+            </div>
+          </details>
+        `,
+        question: {
+          text: "Are your address records up to date with the most recent Geocode information?",
+          yesNext: "createBlockList",
+          noNext: "geocode"
+        }
+      },
+    
+      geocode: {
+        type: "action", step: 4,
+        title: "Geocoding Your Address List",
+        description:
+    `You can use the Batch LUCA Geocoder or your local GIS system. Each record must include either a ZIP Code or coordinates.
+    <br><br>
+    If coordinates are missing, interpolation is used — this produces expected positional offsets.`,
+        links: [{ text: "Click here for Geocoding Tool", href: "#" }],
+        originalHTML: `
+          <div class="box">
+            <h3><strong>Original content (kept as‑is)</strong></h3>
+            <p>Interpolation offset is expected; corrections occur during LUCA review.</p>
+          </div>
+        `,
+        augmentedHTML: `
+          <details class="accordion">
+            <summary><span class="chev">▶</span> Augmented guidance (from webinar)</summary>
+            <div class="content">
+              <p><strong>Geocoder limits:</strong></p>
+              <ul>
+                <li>Max 10,000 addresses</li>
+                <li>Max 5 MB file size</li>
+                <li>Split files for larger jurisdictions</li>
+              </ul>
+              <p><strong>Common issues:</strong></p>
+              <ul>
+                <li>Wrong delimiter (CSV)</li>
+                <li>Missing LOCATION_DESCRIPTION for rural addresses</li>
+              </ul>
+            </div>
+          </details>
+        `,
+        action: { label: "Next", next: "createBlockList" }
+      },
+    
+      createBlockList: {
+        type: "action", step: 5,
+        title: "Creating an Address Count Listing File",
+        description:
+    `Use the Batch LUCA Block Count List or GIS for block GEOID + count.
+    <br><br>
+    Confirm block assignments and counts before continuing.`,
+        links: [
+          { text: "Click here for Geocoding Tool", href: "#" },
+          { text: "Click Here for Partnership Shapefiles", href: "#" }
+        ],
+        originalHTML: `
+          <div class="box">
+            <h3><strong>Original content (kept as‑is)</strong></h3>
+            <p>Be sure block counts match your dataset.</p>
+          </div>
+        `,
+        augmentedHTML: `
+          <details class="accordion">
+            <summary><span class="chev">▶</span> Augmented guidance (from webinar)</summary>
+            <div class="content">
+              <p><strong>Validate:</strong></p>
+              <ul>
+                <li>Blocks assigned correctly</li>
+                <li>ADUs/HHUs counted separately</li>
+                <li>Group quarters counted once</li>
+              </ul>
+            </div>
+          </details>
+        `,
+        action: { label: "Next", next: "compareCounts" }
+      },
+    
+      compareCounts: {
+        type: "question", step: 6,
+        title: "Compare your Address Count Listing",
+        description:
+    `Download counts, join by block GEOID, and compare totals.`,
+        links: [{ text: "Click here to download Address Count Listing Files", href: "#" }],
+        ask: "Do the address counts match at the census block level?",
+        yes: "countsSame",
+        no: "countsDifferent",
+        originalHTML: `
+          <div class="box">
+            <h3><strong>Original content (kept as‑is)</strong></h3>
+            <ol>
+              <li>Download published counts</li>
+              <li>Join using block GEOID</li>
+              <li>Compare totals</li>
+            </ol>
+          </div>
+        `,
+        augmentedHTML: `
+          <details class="accordion">
+            <summary><span class="chev">▶</span> Augmented guidance (from webinar)</summary>
+            <div class="content">
+              <p><strong>Tools:</strong></p>
+              <ul>
+                <li>VLOOKUP/XLOOKUP</li>
+                <li>SQL join</li>
+                <li>Pandas merge</li>
+              </ul>
+              <p><strong>Interpret differences:</strong></p>
+              <ul>
+                <li>New development</li>
+                <li>Missing HU/GQ</li>
+                <li>Incorrect block placement</li>
+              </ul>
+            </div>
+          </details>
+        `
+      },
+    
+      countsSame: {
+        type: "outcome", step: 7, style: "success",
+        icon: "✓", title: "Address Counts Match",
+        description:
+    `Counts match; LUCA review may not be needed.`,
+        originalHTML: `
+          <div class="box">
+            <h3><strong>Original content</strong></h3>
+            <p>Still check again if new development appears.</p>
+          </div>
+        `,
+        augmentedHTML: `
+          <details class="accordion">
+            <summary><span class="chev">▶</span> Augmented guidance</summary>
+            <div class="content">
+              <p>Monitor growth and update counts semi‑annually.</p>
+            </div>
+          </details>
+        `
+      },
+    
+      countsDifferent: {
+        type: "outcome", step: 8, style: "warn",
+        icon: "!", title: "Counts Do Not Match",
+        description:
+    `Differences indicate gaps between local and Census address lists.`,
+        callout:
+    `Review blocks, identify discrepancies, and focus LUCA time.`,
+        originalHTML: `
+          <div class="box">
+            <h3><strong>Original content</strong></h3>
+            <p>Differences may indicate missing addresses or block issues.</p>
+          </div>
+        `,
+        augmentedHTML: `
+          <details class="accordion">
+            <summary><span class="chev">▶</span> Augmented guidance</summary>
+            <div class="content">
+              <p><strong>Differences may arise from:</strong></p>
+              <ul>
+                <li>HHUs/ADUs newly discovered</li>
+                <li>New construction</li>
+                <li>Incorrect GQ counting</li>
+              </ul>
+            </div>
+          </details>
+        `
+      }
+    };
+    
+    /* ========= UI Elements ========= */
+    const el = {
+      card: document.getElementById("card"),
+      crumb: document.getElementById("crumb"),
+      nav: document.getElementById("nav"),
+      pBar: document.getElementById("pBar"),
+      pText: document.getElementById("pText"),
+      pPct: document.getElementById("pPct"),
+      hist: document.getElementById("hist"),
+      histList: document.getElementById("histList")
+    };
+    
+    /* ========= Sidebar ========= */
+    const sidebarOrder = [
+      ["start","Step 1: Address List?"],
+      ["createList","Step 2: Create Address List"],
+      ["convertPAL","Step 3: PAL Template"],
+      ["geocode","Step 4: Geocode Address List"],
+      ["createBlockList","Step 5: Address Count Listing"],
+      ["compareCounts","Step 6: Compare Counts"],
+      ["countsSame","Step 7: Counts Match"],
+      ["countsDifferent","Step 8: Counts Different"]
+    ];
+    
+    let current = "start";
+    let trail = [];
+    
+    /* Build Sidebar */
+    function buildSidebar(){
+      el.nav.innerHTML = sidebarOrder.map(([id,label])=>{
+        const active = id===current ? ' class="active"' : '';
+        return `<li${active}>#${label}</a></li>`;
+      }).join("");
+    
+      Array.from(el.nav.querySelectorAll("a")).forEach(a=>{
+        a.addEventListener("click",(ev)=>{
+          ev.preventDefault();
+          go(a.dataset.id);
+        });
+      });
+    }
+    
+    function renderSidebar(){
+      const items = el.nav.querySelectorAll("li");
+      items.forEach((li,i)=>{
+        const id = sidebarOrder[i][0];
+        li.classList.toggle("active", id===current);
+      });
+    }
+    
+    /* ========= Rendering ========= */
+    function render(){
+      renderSidebar();
+      const node = steps[current];
+    
+      const crumbLabel =
+        node.type==="question" ? "Decision Point" :
+        node.type==="action" ? "Review / Action" :
+        "Outcome";
+      el.crumb.innerHTML = `<span>2030 LUCA</span><span>›</span><span>${crumbLabel}</span>`;
+    
+      const pctMap = {1:12,2:24,3:36,4:48,5:60,6:72,7:88,8:100};
+      const pct = pctMap[node.step] || 12;
+      el.pBar.style.width = pct + "%";
+      el.pPct.textContent = pct + "%";
+      el.pText.textContent = node.type==="outcome"
+        ? "Decision complete"
+        : `Step ${node.step} of 8`;
+    
+      if(node.type==="question") return renderQuestion(node);
+      if(node.type==="action") return renderAction(node);
+      renderOutcome(node);
+    
+      updateHistory();
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+    
+    /* -------- QUESTION -------- */
+    function renderQuestion(node){
+      const ask = node.ask
+        ? `<div class="box"><strong>${node.ask}</strong></div>`
+        : "";
+    
+      el.card.innerHTML = `
+        <div class="card-header">
+          <div class="label">Decision point</div>
+          <h2>${node.title}</h2>
+        </div>
+    
+        <div class="card-body">
+          ${node.originalHTML}
+          ${node.augmentedHTML}
+          ${ask}
+    
+          <div class="grid">
+            <button class="btn" onclick="choose('yes')">
+              <span class="title"><span class="chip yes">✓</span> Yes</span>
+            </button>
+            <button class="btn" onclick="choose('no')">
+              <span class="title"><span class="chip no">×</span> No</span>
+            </button>
+          </div>
+    
+          ${controls()}
+        </div>
+      `;
+    }
+    
+    /* -------- ACTION -------- */
+    function renderAction(node){
+      const linkHTML = node.links?.length
+        ? `<div class="links">${node.links.map(l=>`${l.href}${l.text}</a>`).join("")}</div>`
+        : "";
+    
+      const embedQ = node.question
+        ? `
+        <div class="box">
+          <strong>Embedded question:</strong><br/>${node.question.text}
+          <div class="grid" style="margin-top:10px;">
+            <button class="btn" onclick="palBranch('yes')">
+              <span class="title"><span class="chip yes">✓</span> Yes</span>
+            </button>
+            <button class="btn" onclick="palBranch('no')">
+              <span class="title"><span class="chip no">×</span> No</span>
+            </button>
+          </div>
+        </div>`
+        : "";
+    
+      const nextBtn = node.action
+        ? `<button class="primary" onclick="advance('${node.action.next}')">${node.action.label} →</button>`
+        : "";
+    
+      el.card.innerHTML = `
+        <div class="card-header">
+          <div class="label">Review / Action</div>
+          <h2>${node.title}</h2>
+          <p>${node.description}</p>
+        </div>
+    
+        <div class="card-body">
+          ${node.originalHTML}
+          ${node.augmentedHTML}
+          ${linkHTML}
+          ${embedQ}
+    
+          <div class="box">
+            <p>Complete this step before continuing.</p>
+          </div>
+    
+          ${nextBtn}
+          ${controls()}
+        </div>
+      `;
+    }
+    
+    /* -------- OUTCOME -------- */
+    function renderOutcome(node){
+      el.card.innerHTML = `
+        <div class="outcome ${node.style}">
+          <div class="o-icon">${node.icon}</div>
+          <h2>${node.title}</h2>
+          <p>${node.description}</p>
+          ${node.callout ? `<div class="callout"><strong>Recommended next steps</strong><p>${node.callout}</p></div>` : ""}
+          
+          ${node.originalHTML}
+          ${node.augmentedHTML}
+    
+          <button class="primary" onclick="restart()">Start Over</button>
+        </div>
+      `;
+    }
+    
+    /* -------- Controls -------- */
+    function controls(){
+      const canBack = trail.length>0;
+      return `
+        <div class="controls">
+          <button class="secondary" ${canBack ? "" : "disabled"} onclick="back()">← Back</button>
+          <button class="secondary" onclick="restart()">Start Over</button>
+        </div>
+      `;
+    }
+    
+    /* -------- Handlers -------- */
+    function go(id){
+      if(steps[id]){ current=id; render(); }
+    }
+    
+    function choose(ans){
+      const node = steps[current];
+      trail.push({step:current,answer:ans});
+      current = node[ans];
+      render();
+    }
+    
+    function advance(next){
+      trail.push({step:current,answer:"completed"});
+      current = next;
+      render();
+    }
+    
+    function palBranch(ans){
+      const q = steps.convertPAL.question;
+      trail.push({step:"convertPAL",answer:ans});
+      current = ans==="yes" ? q.yesNext : q.noNext;
+      render();
+    }
+    
+    function back(){
+      if(!trail.length) return;
+      current = trail.pop().step;
+      render();
+    }
+    
+    function restart(){
+      trail = [];
+      current = "start";
+      render();
+    }
+    
+    /* -------- History -------- */
+    function updateHistory(){
+      if(!trail.length){
+        el.hist.style.display="none";
+        return;
+      }
+      el.hist.style.display="block";
+      el.histList.innerHTML = trail.map(t=>{
+        const n = steps[t.step];
+        return `<span class="pill">${n.title} — ${t.answer}</span>`;
+      }).join("");
+    }
+    
+    /* Start */
+    buildSidebar();
+    render();
+    </script>
+
+</body>
+</html>
